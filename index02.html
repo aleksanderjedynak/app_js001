@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redux basic example</title>
+    <!--STEP 1.1-->
+    <script src="https://npmcdn.com/redux@latest/dist/redux.min.js"></script>
+    <!--~end STEP 1.1-->
+  </head>
+  <body>
+    <div>
+      <p>
+        Clicked: <span id="value">!</span> times
+        <button id="decrement">Decrease</button>
+        <button id="increase">Increase</button>
+        <button id="incrementAsync">Increment async</button>
+        <button id="reset">Reset</button>
+      </p>
+    </div>
+    <script>
+
+      var store = Redux.createStore(counter);
+      var valueEl = document.getElementById('value');
+
+      function render() {
+        valueEl.innerHTML = store.getState().count;
+      }
+
+      render();
+
+      store.subscribe(render);
+
+      function counter(currentState, action) {
+
+        var DEFAULT_STATE = {count:0};
+
+        var nextState = Object.assign({}, currentState);
+          if(currentState === undefined){
+            nextState = DEFAULT_STATE;
+            return nextState;
+          }
+
+
+        switch(action.type){
+          case 'DECREMENT':
+            nextState.count = currentState.count - 1;
+            return nextState;
+          case 'INCREMENTASYNC':
+            nextState.count = currentState.count + 10;
+            return nextState;
+          case 'INCREASE':
+            nextState.count = currentState.count + 1;
+            return nextState;
+          case 'RESET':
+            nextState.count = 0;
+            return nextState;
+          default:
+            return nextState;
+        }
+
+      }//funtciotn counter
+
+      document.getElementById('decrement')
+        .addEventListener('click', function () {
+            var action = {type: 'DECREMENT'};
+            store.dispatch(action);
+        })
+      document.getElementById('incrementAsync')
+        .addEventListener('click', function () {
+          setTimeout(
+            function increment () {
+              var action = {type: 'INCREMENTASYNC'};
+              store.dispatch(action);
+            }
+          , 1000);
+        })
+        document.getElementById('increase')
+          .addEventListener('click', function () {
+            var action = {type: 'INCREASE'};
+            store.dispatch(action);
+          })
+        document.getElementById('reset')
+          .addEventListener('click', function () {
+            var action = {type: 'RESET'};
+            store.dispatch(action);
+          })
+
+    </script>
+  </body>
+</html>
