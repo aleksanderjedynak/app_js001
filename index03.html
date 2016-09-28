@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redux basic example</title>
+    <script src="https://npmcdn.com/redux@latest/dist/redux.min.js"></script>
+  </head>
+  <body>
+    <div>
+      <p>
+        <input id="sumA" value="1"/> + <input id="sumB" value="2"/>
+        = <span id="value">?</span>
+        <button id="sum">Sum</button>
+      </p>
+      <p>
+        <input id="differenceA" value="1"/> - <input id="differenceB" value="1"/>
+        = <span id="value2">?</span>
+        <button id="difference">difference</button>
+      </p>
+      <p>
+        <input id="iA" value="2"/> - <input id="iB" value="2"/>
+        = <span id="value3">?</span>
+        <button id="i">*</button>
+      </p>
+      <p>
+        <input id="eA" value="10"/> - <input id="eB" value="2"/>
+        = <span id="value4">?</span>
+        <button id="e">/</button>
+      </p>
+    </div>
+    <script>
+      var store = Redux.createStore(counter)
+      function render() {
+         var state = store.getState();
+         document.getElementById('value').innerHTML = state.sum;
+         document.getElementById('value2').innerHTML = state.difference;
+         document.getElementById('value3').innerHTML = state.i;
+         document.getElementById('value4').innerHTML = state.e;
+      };
+      store.subscribe(render);
+      render();
+
+      function counter(currentState, action) {
+        var DEFAULT_STATE = {sum:3, difference: 0, i:4, e:5 };
+        var nextState = Object.assign({},currentState);
+        if (currentState === undefined) {
+
+          nextState = DEFAULT_STATE;
+          return nextState;
+        }
+        console.log(action);
+        switch (action.type) {
+          case 'SUM':
+            nextState.sum = parseInt(action.a) + parseInt(action.b);
+            return nextState;
+          case 'DIFFERENCE':
+            nextState.difference = parseInt(action.a) - parseInt(action.b);
+            return nextState;
+          case 'I':
+            nextState.i = parseInt(action.a) * parseInt(action.b);
+            return nextState;
+          case 'E':
+            nextState.e = parseInt(action.a) / parseInt(action.b);
+            return nextState;
+          default:
+            return nextState;
+        }
+      }
+      document.getElementById('sum')
+        .addEventListener('click', function () {
+          var a = document.getElementById('sumA').value;
+          var b = document.getElementById('sumB').value;
+          var action = { type: 'SUM', a:a , b:b };
+          store.dispatch(action);
+        })
+      document.getElementById('difference')
+        .addEventListener('click', function () {
+          var a = document.getElementById('differenceA').value;
+          var b = document.getElementById('differenceB').value;
+          var action = { type: 'DIFFERENCE', a:a , b:b };
+          store.dispatch(action);
+        })
+      document.getElementById('i')
+        .addEventListener('click', function () {
+          var a = document.getElementById('iA').value;
+          var b = document.getElementById('iB').value;
+          var action = { type: 'I', a:a , b:b };
+          store.dispatch(action);
+        })
+      document.getElementById('e')
+        .addEventListener('click', function () {
+          var a = document.getElementById('eA').value;
+          var b = document.getElementById('eB').value;
+          var action = { type: 'E', a:a , b:b };
+          store.dispatch(action);
+        })
+    </script>
+  </body>
+</html>
